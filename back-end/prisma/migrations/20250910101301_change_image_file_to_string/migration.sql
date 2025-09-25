@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `Task` MODIFY `file` VARCHAR(255) NULL,
+    MODIFY `image` VARCHAR(255) NULL;

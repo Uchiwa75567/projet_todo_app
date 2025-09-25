@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `Task` ADD COLUMN `file` LONGBLOB NULL,
+    ADD COLUMN `image` LONGBLOB NULL;

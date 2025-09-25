@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Task {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  completed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Dates de début et fin de la tâche
+  startDate DateTime?
+  endDate   DateTime?
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  // Noms des fichiers
+  image String?
+  file  String?
+  voice String? // Chemin du fichier audio pour les messages vocaux
+
+  permissions TaskPermission[]
+  ActionLog   ActionLog[]
+  notifications Notification[]
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String @db.VarChar(100)
+  email    String @unique @db.VarChar(255)
+  password String
+
+  tasks       Task[]
+  permissions TaskPermission[] // 🔹 Relation inverse
+  ActionLog   ActionLog[]
+  notifications Notification[]
+}
+
+model TaskPermission {
+  id        Int     @id @default(autoincrement())
+  taskId    Int
+  userId    Int
+  canEdit   Boolean @default(false)
+  canDelete Boolean @default(false)
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([taskId, userId])
+}
+
+model ActionLog {
+  id        Int      @id @default(autoincrement())
+  action    String   @db.VarChar(50)
+  timestamp DateTime @default(now())
+
+  // On garde la trace même si la tâche est supprimée
+  taskId Int?
+  task   Task? @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  message   String   @db.Text
+  type      String   @db.VarChar(50) // 'task_started', 'task_completed', 'task_modified'
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  taskId Int?
+  task   Task? @relation(fields: [taskId], references: [id], onDelete: Cascade)
+}

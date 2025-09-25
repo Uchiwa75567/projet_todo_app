@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    // Version d'ECMAScript ciblée pour la compilation
+    "target": "ES2020",
+    // Système de modules à utiliser
+    "module": "NodeNext",
+    // Stratégie de résolution des modules
+    "moduleResolution": "NodeNext",
+    // Permet l'interopérabilité entre CommonJS et ES Modules
+    "esModuleInterop": true,
+    // Ignore la vérification des types dans les fichiers de bibliothèques
+    "skipLibCheck": true,
+    // Active toutes les vérifications de type strictes
+    "strict": true,
+    // Assure la cohérence de la casse dans les noms de fichiers
+    "forceConsistentCasingInFileNames": true,
+    // Permet d'importer des fichiers JSON
+    "resolveJsonModule": true,
+    // Assure que chaque fichier peut être compilé indépendamment
+    "isolatedModules": true,
+    // Dossier de sortie pour les fichiers compilés
+    "outDir": "dist"
+  },
+  // Fichiers à inclure dans la compilation
+  "include": ["src", "index.ts", "prisma"],
+  // Fichiers à exclure de la compilation
+  "exclude": ["node_modules"]
+}
