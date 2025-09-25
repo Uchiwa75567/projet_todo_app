@@ -23,8 +23,14 @@ const LoginForm = () => {
   };
 
   const validateForm = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
     if (!formData.email.trim()) {
       setError('L\'email est obligatoire');
+      return false;
+    }
+    if (!emailRegex.test(formData.email.trim())) {
+      setError('Veuillez entrer un email valide (exemple: nom@gmail.com)');
       return false;
     }
     if (!formData.password.trim()) {
@@ -78,7 +84,7 @@ const LoginForm = () => {
               <input
                 id="email"
                 name="email"
-                type="email"
+                type="text"
                 value={formData.email}
                 onChange={handleChange}
                 className="input-field"

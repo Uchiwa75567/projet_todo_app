@@ -13,6 +13,19 @@ const Input = ({
   className = '',
   ...props
 }) => {
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    if (type === 'email' && value && !validateEmail(value)) {
+      error = "Veuillez entrer un email valide (exemple: nom@gmail.com)";
+    }
+    onChange(e);
+  };
+
   const inputClasses = `
     mt-1 block w-full px-3 py-2 border rounded-md shadow-sm 
     focus:outline-none focus:ring-1 
@@ -37,7 +50,7 @@ const Input = ({
         name={name}
         type={type}
         value={value}
-        onChange={onChange}
+        onChange={handleChange}
         placeholder={placeholder}
         required={required}
         disabled={disabled}
